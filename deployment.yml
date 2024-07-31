@@ -15,26 +15,32 @@ spec:
         app: debug-app
     spec:
       containers:
-        - name: main-container
-          image: nginx:1.27.1
+        - name: debug-app
+          image: nginx:latest
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
           resources:
             requests:
+              cpu: 50m
+              memory: 63Mi
+            limits:
               cpu: 100m
               memory: 128Mi
-            limits:
-              cpu: 50m
-              memory: 64Mi
           readinessProbe:
             httpGet:
-              path: /healthz
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: /healthz
               port: 8080
             initialDelaySeconds: 15
             periodSeconds: 10
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
