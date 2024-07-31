@@ -8,7 +8,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: debug-app
+      app: debug-apps
   template:
     metadata:
       labels:
